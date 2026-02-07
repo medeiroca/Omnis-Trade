@@ -1,0 +1,67 @@
+services:
+  # --- DATABASE (Postgres) ---
+  postgres:
+    image: postgres:17-alpine
+    container_name: omnis-postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: omnis_db
+    ports:
+      - "5432:5432"
+
+  # --- EVENT STORE & MESSAGE ROUTER (Axon Server) ---
+  axon-server:
+    image: axoniq/axonserver:latest
+    container_name: omnis-axon-server
+    ports:
+      - "8124:8124" # gRPC for applications
+      - "8024:8024" # HTTP Web Console
+    environment:
+      - AXONIQ_AXONSERVER_NAME=axon-server
+      - AXONIQ_AXONSERVER_HOSTNAME=localhost
+
+  # --- OBSERVABILITY: OTEL COLLECTOR ---
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.90.0
+    container_name: omnis-otel-collector
+    volumes:
+      - ./infra/otel-config.yaml:/etc/otel-col/config.yaml
+    command: ["--config=/etc/otel-col/config.yaml"]
+    ports:
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+      - "8889:8889" # Prometheus exporter port
+
+  # --- OBSERVABILITY: METRICS (Prometheus) ---
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: omnis-prometheus
+    volumes:
+      - ./infra/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  # --- OBSERVABILITY: TRACING (Tempo) ---
+  tempo:
+    image: grafana/tempo:latest
+    container_name: omnis-tempo
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./infra/tempo-config.yaml:/etc/tempo.yaml
+    ports:
+      - "3200:3200" # Tempo port
+      - "4317"      # OTLP gRPC
+
+  # --- OBSERVABILITY: VISUALIZATION (Grafana) ---
+  grafana:
+    image: grafana/grafana:latest
+    container_name: omnis-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    depends_on:
+      - prometheus
+      - tempo
