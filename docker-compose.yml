@@ -20,6 +20,7 @@ services:
     environment:
       - AXONIQ_AXONSERVER_NAME=axon-server
       - AXONIQ_AXONSERVER_HOSTNAME=localhost
+      - AXONIQ_AXONSERVER_DEVMODE_ENABLED=true
 
   # --- OBSERVABILITY: OTEL COLLECTOR ---
   otel-collector:
