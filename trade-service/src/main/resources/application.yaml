@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: trade-service
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/omnis_db
+    username: user
+    password: password
+
+axon:
+  axonserver:
+    servers: localhost:8124
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
