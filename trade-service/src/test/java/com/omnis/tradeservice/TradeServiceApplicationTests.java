@@ -1,4 +1,4 @@
-package com.omnis.trade_service;
+package com.omnis.tradeservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

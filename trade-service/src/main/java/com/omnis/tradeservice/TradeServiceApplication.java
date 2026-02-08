@@ -1,4 +1,4 @@
-package com.omnis.trade_service;
+package com.omnis.tradeservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
