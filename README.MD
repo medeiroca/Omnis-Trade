@@ -10,7 +10,7 @@ This project implements a reactive currency exchange engine leveraging the full 
 |:-------------------|:----------------------------------------------------------------------|
 | **Framework** | Spring Boot 3.4+ / Spring Cloud Gateway (Reactive & Non-blocking)     |
 | **Architecture** | CQRS & Event Sourcing with **Axon Framework**                         |
-| **Observability** | **OpenTelemetry**, Prometheus, Grafana, Tempo, Loki (LGTM Stack)      |
+| **Observability** | **OpenTelemetry**, Prometheus, Grafana, Jaeger, Loki (LGTM Stack)      |
 | **Resilience** | **Resilience4j** (Circuit Breaker, Rate Limiter, Retry)               |
 | **Security** | Spring Security, **OAuth2**, Keycloak (JWT)                           |
 | **Persistence** | PostgreSQL (Write/Event Store), Redis (Read Cache), **Flyway**        |
@@ -39,7 +39,7 @@ The project follows a Hexagonal Architecture (Ports and Adapters) combined with 
 ## 🗺️ Roadmap & Evolution
 
 ### Phase 1: The Observability Foundation (Current)
-- [x] Setup Docker Compose with **LGTM Stack** (Loki, Grafana, Tempo, Mimir).
+- [x] Setup Docker Compose with **Observability Stack** (Loki, Grafana, Jaeger, Prometheus).
 - [x] Configure **OpenTelemetry Collector** for cross-service telemetry.
 - [x] Implement **Spring Cloud Gateway** as the unified entry point.
 
@@ -74,3 +74,10 @@ The project follows a Hexagonal Architecture (Ports and Adapters) combined with 
 ### Running the Infrastructure
 ```bash
 docker-compose up -d
+```
+
+### 🔍 Observability Access
+*   **Grafana (Centralized):** [http://localhost:3000](http://localhost:3000) (Use the **Explore** tab with **Jaeger** datasource)
+*   **Jaeger UI (Traces):** [http://localhost:16686](http://localhost:16686)
+*   **Prometheus (Metrics):** [http://localhost:9090](http://localhost:9090)
+*   **Axon Dashboard:** [http://localhost:8024](http://localhost:8024)
