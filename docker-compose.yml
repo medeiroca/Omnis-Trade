@@ -13,51 +13,65 @@ services:
   # --- EVENT STORE & MESSAGE ROUTER (Axon Server) ---
   axon-server:
     image: axoniq/axonserver:latest
-    container_name: omnis-axon-server
-    ports:
-      - "8124:8124" # gRPC for applications
-      - "8024:8024" # HTTP Web Console
+    container_name: omnis-axon
+    hostname: omnis-axon
     environment:
-      - AXONIQ_AXONSERVER_NAME=axon-server
+      - AXONIQ_AXONSERVER_NAME=omnis-axon
       - AXONIQ_AXONSERVER_HOSTNAME=localhost
       - AXONIQ_AXONSERVER_DEVMODE_ENABLED=true
+      - AXONIQ_AXONSERVER_CONTEXT_DEFAULT_PRINCIPAL-NODES=omnis-axon
+    ports:
+      - "8124:8124"
+      - "8024:8024"
+    volumes:
+      - ./infra/axon/data:/data
+      - ./infra/axon/config:/config
+      - ./infra/axon/events:/eventdata
+      - ./infra/axon/log:/control
 
   # --- OBSERVABILITY: OTEL COLLECTOR ---
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.90.0
     container_name: omnis-otel-collector
+    networks:
+      - omnis-network
     volumes:
       - ./infra/otel-config.yaml:/etc/otel-col/config.yaml
-    command: ["--config=/etc/otel-col/config.yaml"]
+    command: [ "--config=/etc/otel-col/config.yaml" ]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "4317:4317" # OTLP gRPC
       - "4318:4318" # OTLP HTTP
-      - "8889:8889" # Prometheus exporter port
+      - "8889:8889" # Prometheus
 
   # --- OBSERVABILITY: METRICS (Prometheus) ---
   prometheus:
     image: prom/prometheus:latest
     container_name: omnis-prometheus
+    networks:
+      - omnis-network
     volumes:
       - ./infra/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
 
-  # --- OBSERVABILITY: TRACING (Tempo) ---
-  tempo:
-    image: grafana/tempo:latest
-    container_name: omnis-tempo
-    command: [ "-config.file=/etc/tempo.yaml" ]
-    volumes:
-      - ./infra/tempo-config.yaml:/etc/tempo.yaml
+  # --- OBSERVABILITY: TRACING (Jaeger) ---
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: omnis-jaeger
+    networks:
+      - omnis-network
     ports:
-      - "3200:3200" # Tempo port
-      - "4317"      # OTLP gRPC
+      - "16686:16686" # UI
+      # OTLP ports 4317/4318 are handled by the collector
 
-  # --- OBSERVABILITY: VISUALIZATION (Grafana) ---
+      # --- OBSERVABILITY: VISUALIZATION (Grafana) ---
   grafana:
     image: grafana/grafana:latest
     container_name: omnis-grafana
+    networks:
+      - omnis-network
     ports:
       - "3000:3000"
     environment:
@@ -65,4 +79,10 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
     depends_on:
       - prometheus
-      - tempo
+      - jaeger
+    volumes:
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning
+
+networks:
+  omnis-network:
+    driver: bridge
