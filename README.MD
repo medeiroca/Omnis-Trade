@@ -41,12 +41,16 @@ The project follows a Hexagonal Architecture (Ports and Adapters) combined with 
 ### Phase 1: The Observability Foundation (Current)
 - [x] Setup Docker Compose with **LGTM Stack** (Loki, Grafana, Tempo, Mimir).
 - [x] Configure **OpenTelemetry Collector** for cross-service telemetry.
-- [ ] Implement **Spring Cloud Gateway** as the unified entry point.
+- [x] Implement **Spring Cloud Gateway** as the unified entry point.
 
 ### Phase 2: Domain Core & Event Sourcing
-- [ ] Implement the `Trade` Aggregate using **Axon Framework**.
-- [ ] Configure **Axon Server** as the Event Store and Message Router.
-- [ ] Setup **Flyway** for relational schema versioning.
+- [x] Initialize Trade Service with Spring Boot 3.5.2 and Java 21.
+- [x] Implement the Trade Aggregate using Axon Framework.
+- [x] Configure Jackson Serialization for Java Records support in Axon.
+- [x] Connect and verify Axon Server as the Event Store and Message Router.
+- [ ] Implement R2DBC Projection to persist trades in PostgreSQL.
+- [ ] Setup Flyway/R2DBC for relational schema versioning.
+
 
 ### Phase 3: Security & Resilience
 - [ ] Integrate **Keycloak** for OAuth2 Identity Management.
