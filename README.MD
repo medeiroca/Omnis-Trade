@@ -6,19 +6,26 @@ This project implements a reactive currency exchange engine leveraging the full 
 
 ## 🏗️ The Tech Stack
 
-| Category           | Technology                                                                 |
-|:-------------------|:---------------------------------------------------------------------------|
-| **Framework** | Spring Boot 3.4+ / Spring Cloud Gateway                                    |
-| **Architecture** | CQRS & Event Sourcing with **Axon Framework** |
-| **Observability** | **OpenTelemetry**, Prometheus, Grafana, Tempo, Loki (LGTM Stack)           |
-| **Resilience** | **Resilience4j** (Circuit Breaker, Rate Limiter, Retry)                    |
-| **Security** | Spring Security, **OAuth2**, Keycloak (JWT)                                |
-| **Persistence** | PostgreSQL (Write/Event Store), Redis (Read Cache), **Flyway** |
-| **Messaging** | Apache Kafka / Axon Server                                                 |
-| **Infrastructure** | **Testcontainers**, Docker Compose, GraalVM Native Image (AOT)             |
+| Category           | Technology                                                            |
+|:-------------------|:----------------------------------------------------------------------|
+| **Framework** | Spring Boot 3.4+ / Spring Cloud Gateway (Reactive & Non-blocking)     |
+| **Architecture** | CQRS & Event Sourcing with **Axon Framework**                         |
+| **Observability** | **OpenTelemetry**, Prometheus, Grafana, Tempo, Loki (LGTM Stack)      |
+| **Resilience** | **Resilience4j** (Circuit Breaker, Rate Limiter, Retry)               |
+| **Security** | Spring Security, **OAuth2**, Keycloak (JWT)                           |
+| **Persistence** | PostgreSQL (Write/Event Store), Redis (Read Cache), **Flyway**        |
+| **Messaging** | Apache Kafka / Axon Server                                            |
+| **Infrastructure** | **Testcontainers**, Docker Compose, GraalVM Native Image (AOT)        |
 
 ---
+## 📐 System Architecture
 
+The project follows a Hexagonal Architecture (Ports and Adapters) combined with a reactive Edge Gateway:
+
+[User] -> [Spring Cloud Gateway (Auth/Rate Limit)] -> [Kafka/Axon Server] -> [Core Trading Service (Axon Aggregate)]
+|
+[LGTM Stack Monitoring]
+---
 ## 🎯 Project Objectives
 
 1.  **Strict CQRS & Event Sourcing:** Complete separation of read and write concerns, ensuring a 100% auditable financial history using Axon.
