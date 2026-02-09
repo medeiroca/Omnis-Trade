@@ -1,83 +1,81 @@
-# 🚀 Omnis-Trade: High-Performance Event-Driven Exchange
+# Omnis-Trade: High-Performance Event-Driven Exchange
 
-A state-of-the-art, cloud-native trading platform built to demonstrate mastery over **Distributed Systems**, **Event Sourcing**, and **Observability** in the 2026 tech landscape.
+A state-of-the-art, cloud-native trading platform built to demonstrate mastery over Distributed Systems, Event Sourcing, and advanced Observability in the modern tech landscape.
 
-This project implements a reactive currency exchange engine leveraging the full power of the Spring ecosystem, Axon Framework, and the LGTM observability stack.
+This project implements a reactive currency exchange engine leveraging the full power of the Spring ecosystem, Axon Framework, and the LGTM observability stack (Loki, Grafana, Tempo, Prometheus).
 
-## 🏗️ The Tech Stack
+## Tech Stack
 
-| Category           | Technology                                                            |
-|:-------------------|:----------------------------------------------------------------------|
-| **Framework** | Spring Boot 3.4+ / Spring Cloud Gateway (Reactive & Non-blocking)     |
-| **Architecture** | CQRS & Event Sourcing with **Axon Framework**                         |
-| **Observability** | **OpenTelemetry**, Prometheus, Grafana, Jaeger, Loki (LGTM Stack)      |
-| **Resilience** | **Resilience4j** (Circuit Breaker, Rate Limiter, Retry)               |
-| **Security** | Spring Security, **OAuth2**, Keycloak (JWT)                           |
-| **Persistence** | PostgreSQL (Write/Event Store), Redis (Read Cache), **Flyway**        |
-| **Messaging** | Apache Kafka / Axon Server                                            |
-| **Infrastructure** | **Testcontainers**, Docker Compose, GraalVM Native Image (AOT)        |
-
----
-## 📐 System Architecture
-
-The project follows a Hexagonal Architecture (Ports and Adapters) combined with a reactive Edge Gateway:
-
-[User] -> [Spring Cloud Gateway (Auth/Rate Limit)] -> [Kafka/Axon Server] -> [Core Trading Service (Axon Aggregate)]
-|
-[LGTM Stack Monitoring]
----
-## 🎯 Project Objectives
-
-1.  **Strict CQRS & Event Sourcing:** Complete separation of read and write concerns, ensuring a 100% auditable financial history using Axon.
-2.  **Full-Spectrum Observability:** Implementing a "Single Pane of Glass" view where traces, logs, and metrics are correlated via OpenTelemetry.
-3.  **Resilience by Design:** Protecting internal services from external API instability using sophisticated fault-tolerance patterns.
-4.  **Security at the Edge:** Centralized authentication and RBAC (Role-Based Access Control) at the Gateway level.
-5.  **Cloud-Native Performance:** Leveraging Spring AOT for GraalVM Native Images to achieve sub-second startup times and minimal memory footprint.
+| Category | Technology |
+|:---|:---|
+| **Framework** | Spring Boot 3.4+ / Spring Cloud Gateway (Reactive Stack) |
+| **Architecture** | CQRS & Event Sourcing via Axon Framework |
+| **Observability** | OpenTelemetry, Prometheus, Grafana, Jaeger, Loki (LGTM Stack) |
+| **Resilience** | Resilience4j (Circuit Breaker, Rate Limiter, Retry) |
+| **Security** | Spring Security, OAuth2, Keycloak (JWT) |
+| **Persistence** | PostgreSQL (Write/Event Store), Redis (Read Cache), Flyway |
+| **Data Access** | R2DBC (Reactive & Non-blocking Persistence) |
+| **Messaging** | Apache Kafka / Axon Server |
+| **Infrastructure** | Testcontainers, Docker Compose, GraalVM Native Image (AOT) |
 
 ---
 
-## 🗺️ Roadmap & Evolution
+## System Architecture
 
-### Phase 1: The Observability Foundation (Current)
-- [x] Setup Docker Compose with **Observability Stack** (Loki, Grafana, Jaeger, Prometheus).
-- [x] Configure **OpenTelemetry Collector** for cross-service telemetry.
-- [x] Implement **Spring Cloud Gateway** as the unified entry point.
+The project follows a Hexagonal Architecture (Ports and Adapters) combined with a reactive Edge Gateway for traffic management and security.
 
-### Phase 2: Domain Core & Event Sourcing
-- [x] Initialize Trade Service with Spring Boot 3.5.2 and Java 21.
-- [x] Implement the Trade Aggregate using Axon Framework.
-- [x] Configure Jackson Serialization for Java Records support in Axon.
-- [x] Connect and verify Axon Server as the Event Store and Message Router.
-- [ ] Implement R2DBC Projection to persist trades in PostgreSQL.
-- [ ] Setup Flyway/R2DBC for relational schema versioning.
+---
 
+## Project Objectives
 
-### Phase 3: Security & Resilience
-- [ ] Integrate **Keycloak** for OAuth2 Identity Management.
-- [ ] Apply **Resilience4j** decorators on external service clients.
-- [ ] Implement Global Exception Handling with correlated Trace IDs.
+1. **Strict CQRS & Event Sourcing:** Complete separation of read and write concerns, ensuring a 100% auditable financial history using Axon's Event Store.
+2. **Full-Spectrum Observability:** Implementation of correlated telemetry where traces, logs, and metrics are integrated via OpenTelemetry into a single pane of glass.
+3. **Reactive Persistence:** Leveraging R2DBC to ensure the data flow from the database to the end client remains entirely non-blocking.
+4. **Resilience by Design:** Protecting against cascading failures using fault-tolerance patterns for both internal and external services.
+5. **Cloud-Native Performance:** Optimization via Spring AOT for GraalVM execution, targeting low memory footprint and near-instant startup times.
 
-### Phase 4: High-Performance & Testing
-- [ ] Create Integration Tests using **Testcontainers** (Postgres, Kafka, Keycloak).
-- [ ] Optimize for **Spring Native** (GraalVM).
+---
+
+## Roadmap & Evolution
+
+### Phase 1: Foundation & Observability
+- [x] Setup Docker Compose with LGTM Stack.
+- [x] Configure OpenTelemetry Collector for cross-service telemetry.
+- [x] Implement Spring Cloud Gateway as the unified entry point.
+
+### Phase 2: Domain Core & Persistence
+- [x] Initialize Trade Service (Spring Boot 3.4+ / Java 21).
+- [x] Implement the Trade Aggregate (Write Side) with Axon.
+- [x] Configure Reactive Projections with R2DBC and PostgreSQL.
+- [x] Database versioning with Flyway and manual ID support (Persistable).
+- [x] Data exposure via DTOs in reactive controllers.
+
+### Phase 3: Quality & Testing Infrastructure
+- [ ] Implement integration tests using **Testcontainers** (Postgres and Axon).
+- [ ] Implement Subscription Queries for real-time updates (SSE).
+- [ ] Global Exception Handling with correlated Trace IDs.
+
+### Phase 4: Resilience & Performance
+- [ ] Decorate external clients with Resilience4j.
+- [ ] Optimize for GraalVM Native Image.
 - [ ] Benchmark JVM vs Native Image performance.
 
 ---
 
-## 🛠️ Getting Started (Local Environment)
+## Local Environment Setup
 
 ### Prerequisites
 * Java 21+
 * Docker & Docker Compose
-* GraalVM (Optional, for Native builds)
+* GraalVM (Optional)
 
 ### Running the Infrastructure
 ```bash
 docker-compose up -d
 ```
 
-### 🔍 Observability Access
-*   **Grafana (Centralized):** [http://localhost:3000](http://localhost:3000) (Use the **Explore** tab with **Jaeger** datasource)
-*   **Jaeger UI (Traces):** [http://localhost:16686](http://localhost:16686)
-*   **Prometheus (Metrics):** [http://localhost:9090](http://localhost:9090)
-*   **Axon Dashboard:** [http://localhost:8024](http://localhost:8024)
+## Monitoring Endpoints
+- Grafana: http://localhost:3000 (Telemetry Dashboards)
+- Jaeger UI: http://localhost:16686 (Distributed Tracing)
+- Prometheus: http://localhost:9090 (Metrics)
+- Axon Dashboard: http://localhost:8024 (Message Routing & Event Store)
