@@ -1,4 +1,4 @@
-package com.omnis.tradeservice.event;
+package com.omnis.tradeservice.coreapi.event;
 
 import com.omnis.tradeservice.domain.OrderSide;
 
