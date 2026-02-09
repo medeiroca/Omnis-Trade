@@ -4,25 +4,36 @@ server:
 spring:
   application:
     name: trade-service
+
+  # --- DATABASE (Reactive R2DBC) ---
   r2dbc:
     url: r2dbc:postgresql://localhost:5432/omnis_db
     username: user
     password: password
 
+  sql:
+    init:
+      mode: always
+
 axon:
   axonserver:
     servers: localhost:8124
+  distributed:
+    enabled: true
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus
+        include: health,info,prometheus,metrics
+
+  # --- OBSERVABILITY (Tracing & Metrics) ---
   tracing:
     sampling:
       probability: 1.0
     propagation:
       type: w3c
+
   otlp:
     tracing:
       endpoint: http://localhost:4318/v1/traces
@@ -34,5 +45,7 @@ management:
 
 logging:
   level:
-    io.opentelemetry: DEBUG
-    io.micrometer.tracing: DEBUG
+    root: INFO
+    io.opentelemetry: INFO
+    org.axonframework: INFO
+    org.springframework.r2dbc: DEBUG

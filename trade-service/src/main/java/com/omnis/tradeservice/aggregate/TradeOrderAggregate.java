@@ -1,7 +1,7 @@
 package com.omnis.tradeservice.aggregate;
 
 import com.omnis.tradeservice.command.CreateOrderCommand;
-import com.omnis.tradeservice.event.OrderCreatedEvent;
+import com.omnis.tradeservice.coreapi.event.OrderCreatedEvent;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
