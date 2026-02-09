@@ -1,10 +1,12 @@
 package com.omnis.tradeservice.query.entity;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "orders")
-public class OrderEntity {
+public class OrderEntity implements Persistable<String> {
     @Id
     private String orderId;
     private String assetPair;
@@ -21,4 +23,19 @@ public class OrderEntity {
     private BigDecimal quantity;
     private String side;
     private LocalDateTime createdAt;
+
+    @Transient
+    private boolean isNew = false;
+
+    @Override
+    @Transient
+    public String getId() {
+        return orderId;
+    }
+
+    @Override
+    @Transient
+    public boolean isNew() {
+        return isNew;
+    }
 }
