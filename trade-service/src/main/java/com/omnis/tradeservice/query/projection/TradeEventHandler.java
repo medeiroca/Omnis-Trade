@@ -7,6 +7,7 @@ import org.axonframework.eventhandling.EventHandler;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 public class TradeEventHandler {
@@ -17,18 +18,17 @@ public class TradeEventHandler {
     }
 
     @EventHandler
-    public void on(OrderCreatedEvent event) {
+    public CompletableFuture<OrderEntity> on(OrderCreatedEvent event) {
         OrderEntity entity = new OrderEntity(
                 event.orderId(),
                 event.assetPair(),
                 event.price(),
                 event.quantity(),
                 event.side().name(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                true
         );
-        
-        repository.save(entity)
-                .doOnSuccess(saved -> System.out.println("Trade persisted: " + saved.getOrderId()))
-                .block();
+
+        return repository.save(entity).toFuture();
     }
 }
